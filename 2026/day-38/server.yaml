@@ -1,0 +1,23 @@
+server:
+  name: devops-web-01
+  ip: 192.168.1.100
+  port: 8080
+
+database:
+  host: db.internal.local
+  name: production_db
+  credentials:
+    user: app_user
+    password: "${DB_PASSWORD}"
+
+startup_script: |
+  #!/bin/bash
+  echo "Starting application server..."
+  systemctl start nginx
+  systemctl start myapp
+  echo "Server ready on port 8080"
+
+startup_command: >
+  This is a folded multi-line string
+  that becomes a single line
+  when parsed by YAML.

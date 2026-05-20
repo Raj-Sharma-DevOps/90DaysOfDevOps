@@ -1,0 +1,33 @@
+name: Reusable Build Test
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        required: false
+        type: string
+        default: "3.12"
+      run_tests:
+        required: false
+        type: boolean
+        default: true
+    outputs:
+      test_result:
+        description: "Test outcome"
+        value: ${{ jobs.build-test.outputs.result }}
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.test.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python_version }}
+      - run: pip install -r requirements.txt
+      - name: Run tests
+        if: inputs.run_tests
+        id: test
+        run: pytest tests/ -v

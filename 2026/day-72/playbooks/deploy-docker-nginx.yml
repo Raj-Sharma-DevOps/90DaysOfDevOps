@@ -1,0 +1,39 @@
+---
+- name: Deploy Docker and Nginx
+  hosts: webservers
+  become: true
+  tasks:
+    - name: Install Docker
+      apt:
+        name: [docker.io, docker-compose-plugin]
+        state: present
+        update_cache: true
+
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Configure Nginx reverse proxy
+      template:
+        src: nginx-proxy.conf.j2
+        dest: /etc/nginx/sites-available/app
+      notify: Reload Nginx
+
+    - name: Enable site
+      file:
+        src: /etc/nginx/sites-available/app
+        dest: /etc/nginx/sites-enabled/app
+        state: link
+
+  handlers:
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded

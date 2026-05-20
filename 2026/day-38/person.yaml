@@ -1,0 +1,11 @@
+name: Raj
+role: DevOps Engineer
+experience_years: 2
+learning: true
+tools:
+  - Linux
+  - Docker
+  - Kubernetes
+  - Terraform
+  - GitHub Actions
+hobbies: [reading, hiking, coding]
